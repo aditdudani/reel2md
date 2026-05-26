@@ -398,6 +398,8 @@ This is currently the weakest part of the pipeline. OCR on short-form video fram
 
 Things that could still improve the pipeline:
 
+- better adaptive frame budget on fast mode
+- adaptive frame budget on balanced and dense modes
 - better text-region detection before OCR
 - better downscaling and preprocessing heuristics
 - faster or more accurate vision models

@@ -2,7 +2,7 @@ Metadata-Version: 2.4
 Name: reel2md
 Version: 0.1.0
 Summary: Local CLI for converting reels and short-form videos into agent-friendly Markdown.
-Author: OpenAI Codex
+Author: Adit Dudani
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 Requires-Dist: Pillow>=10.0.0
