@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reel2md"
+version = "0.1.0"
+description = "Local CLI for converting reels and short-form videos into agent-friendly Markdown."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+  { name = "Adit Dudani" }
+]
+dependencies = [
+  "Pillow>=10.0.0",
+  "pytesseract>=0.3.10",
+  "requests>=2.31.0",
+  "openai-whisper>=20231117",
+  "yt-dlp>=2025.1.0"
+]
+
+[project.scripts]
+reel2md = "reel2md.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

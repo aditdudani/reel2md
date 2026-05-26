@@ -1,0 +1,5 @@
+Pillow>=10.0.0
+pytesseract>=0.3.10
+requests>=2.31.0
+openai-whisper>=20231117
+yt-dlp>=2025.1.0

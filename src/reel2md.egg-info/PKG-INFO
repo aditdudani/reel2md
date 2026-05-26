@@ -1,0 +1,113 @@
+Metadata-Version: 2.4
+Name: reel2md
+Version: 0.1.0
+Summary: Local CLI for converting reels and short-form videos into agent-friendly Markdown.
+Author: OpenAI Codex
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: Pillow>=10.0.0
+Requires-Dist: pytesseract>=0.3.10
+Requires-Dist: requests>=2.31.0
+Requires-Dist: openai-whisper>=20231117
+Requires-Dist: yt-dlp>=2025.1.0
+
+# reel2md
+
+`reel2md` is a local-first CLI that turns a reel or short-form video URL into a timestamped Markdown file for later use with AI tools.
+
+## What it does
+
+1. Resolve the URL with `yt-dlp` metadata.
+2. Build a stable output path like `instagram_ABC123.md`.
+3. Download the reel locally.
+4. Extract scene-change frames with `ffmpeg`.
+5. Run OCR on frames with `tesseract`.
+6. Ask a local Ollama vision model to describe each frame.
+7. Transcribe speech with Whisper.
+8. Merge everything into one Markdown file.
+
+## Prerequisites
+
+Install these system tools and make sure they are on your `PATH`:
+
+- `ffmpeg`
+- `tesseract`
+- `ollama`
+
+You also need an Ollama vision model available locally. Example:
+
+```powershell
+ollama pull llava
+```
+
+For Instagram and other sites that require a logged-in browser session, use the cookies option:
+
+```powershell
+reel2md "https://www.instagram.com/reel/..." --cookies-from-browser chrome
+```
+
+## Install
+
+From this folder:
+
+```powershell
+pip install -e .
+```
+
+## Usage
+
+Run the dependency checker:
+
+```powershell
+reel2md doctor
+```
+
+Convert a reel:
+
+```powershell
+reel2md "https://www.instagram.com/reel/..." --cookies-from-browser chrome
+```
+
+Useful options:
+
+```text
+--output-dir PATH         Directory for final markdown files
+--vision-model NAME       Ollama vision model to use
+--whisper-model NAME      Whisper model size, e.g. base or small
+--scene-threshold FLOAT   FFmpeg scene threshold, default 0.35
+--skip-ocr                Disable OCR
+--skip-vision             Disable Ollama vision descriptions
+--skip-transcription      Disable Whisper transcription
+--keep-temp               Keep intermediate files
+--force                   Reprocess even if the markdown file exists
+```
+
+## Output shape
+
+Each run writes one `.md` file with YAML frontmatter and timestamped steps:
+
+```md
+---
+source: https://www.instagram.com/reel/...
+platform: instagram
+video_id: Cx123Abc
+title: Example Reel
+duration_seconds: 42
+processed_at: 2026-05-26T23:00:00+05:30
+---
+
+# Example Reel
+
+## Steps
+
+**[00:00-00:05]**
+- Spoken: First connect VCC to 3.3 volts.
+- Visual: Close-up of an ESP32 dev board wired to a sensor module.
+- On-screen text: GPIO 34 | VCC | GND
+```
+
+## Notes
+
+- The CLI keeps the output focused on extracted evidence. It does not invent a bill of materials or summary with a second model pass.
+- If you want an Obsidian or RAG layer later, that can sit on top of this output without changing the ingestion pipeline.
+
